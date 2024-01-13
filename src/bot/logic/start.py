@@ -19,7 +19,7 @@ async def start_handler_user_not_exists(message: types.Message):
     institutes = await get_institutes_acronyms()
     faculties = await generate_acronyms_reply_keyboard(institutes)
     await message.answer(hi.format(hbold(message.from_user.full_name)), parse_mode='HTML')
-    await message.answer(choose_institute, reply_markup=faculties, parse_mode='HTML')
+    await message.answer(choose_institute, reply_markup=faculties)
 
 
 # todo: Если юзера ЕСТЬ в базе
