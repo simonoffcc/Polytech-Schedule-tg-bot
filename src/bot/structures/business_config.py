@@ -88,11 +88,7 @@ address = {
 nums = '0123456789'
 symbols = "!?.,$&^*#@;-=+"
 
-#-----------------------------------------------------------------------------------------
-
-ADMIN = (846455075, 6400240913)
-
-#КОНСТАНТЫ
+# Константы
 scheduleStudentLink = "https://ruz.spbstu.ru/faculty/{0}/groups/{1}?date={2}"
 scheduleTeacherLink = "https://ruz.spbstu.ru/teachers/{0}?date={1}"
 timeZone = "Turkey"

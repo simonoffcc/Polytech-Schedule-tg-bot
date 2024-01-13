@@ -1,6 +1,4 @@
-from src.app import parser_methods as DataParser
-
-
+"""
 class WrongInstituteAcronym(Exception):
     def __init__(self, acronym, message='Института с таким акронимом не найдено'):
         self.acronym = acronym
@@ -29,10 +27,11 @@ class UserBusiness:
 
     @staticmethod
     def is_valid_faculty(faculty_acronym: str) -> int:
-        if faculty_acronym.lower().replace(' ', '').replace('\n', '') in DataParser.get_institutes_acronyms():
-            faculty_id = DataParser.get_value_by_another_key(key_to_search='abbr',
-                                                             value_to_search=faculty_acronym,
-                                                             key_to_return_value='id')
+        acronyms_list = get_institutes_acronyms()
+        if faculty_acronym.lower().replace(' ', '').replace('\n', '') in acronyms_list:
+            faculty_id = get_value_by_another_key(key_to_search='abbr',
+                                                        value_to_search=faculty_acronym,
+                                                        key_to_return_value='id')
             return faculty_id
         else:
             raise WrongInstituteAcronym(faculty_acronym)
@@ -44,9 +43,8 @@ class UserBusiness:
         return valid_group_number
 
     def change_faculty(self):
-        """ Coming soon! """
         pass
 
     def change_group(self):
-        """ Coming soon! """
         pass
+"""

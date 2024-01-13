@@ -2,7 +2,7 @@ import re
 import json
 import requests
 
-from . import User
+from src.bot.legacy import User
 
 
 class FacultiesNotFound(Exception):
@@ -10,7 +10,7 @@ class FacultiesNotFound(Exception):
         super().__init__(message)
 
 
-def parse_institute_selection_page() -> dict:
+async def parse_institute_selection_page() -> dict:
     URL = 'https://ruz.spbstu.ru/'
     req = requests.get(URL)
     html_text = req.text
@@ -21,39 +21,39 @@ def parse_institute_selection_page() -> dict:
     return data
 
 
-def get_faculties_data() -> list[dict, ...]:
-    data = parse_institute_selection_page()
+async def get_faculties_data() -> list[dict, ...]:
+    data = await parse_institute_selection_page()
     faculties_data = data['faculties']['data']
     if not isinstance(faculties_data, list):
         raise FacultiesNotFound("Ошибка хранения информации об институтах в формате 'list[dict, ...]'!")
     return faculties_data
 
 
-def get_institutes_ids() -> list[int]:
-    faculties = get_faculties_data()
+async def get_institutes_ids() -> list[int]:
+    faculties = await get_faculties_data()
     values = [faculty.get('id') for faculty in faculties]
     institutes_ids = [value for value in values if value is not None]
     return institutes_ids
 
 
-def get_institutes_names() -> list[str]:
-    faculties = get_faculties_data()
+async def get_institutes_names() -> list[str]:
+    faculties = await get_faculties_data()
     values = [faculty.get('name') for faculty in faculties]
     institutes_names = [value for value in values if value is not None]
     return institutes_names
 
 
-def get_institutes_acronyms() -> list[str]:
-    faculties = get_faculties_data()
+async def get_institutes_acronyms() -> list[str]:
+    faculties = await get_faculties_data()
     values = [faculty.get('abbr') for faculty in faculties]
-    institutes_abbrs = [value.lower() for value in values if value is not None]
+    institutes_abbrs = [value for value in values if value is not None]
     return institutes_abbrs
 
 
-def get_value_by_another_key(*,
-                             key_to_search: str,
-                             value_to_search: str | int,
-                             key_to_return_value: str) -> int | str:
+async def get_value_by_another_key(*,
+                                   key_to_search: str,
+                                   value_to_search: str | int,
+                                   key_to_return_value: str) -> int | str:
     """
     Метод, который позволяет получить информацию из списка словарей по заданному ключу,
     в котором содержится переданное значение, относящееся к другому ключу.
@@ -65,7 +65,7 @@ def get_value_by_another_key(*,
     >>> user_message_from_keyboard = "ИКНТ"
     >>> result = get_value_by_another_key('abbr', user_message_from_keyboard, 'id')
     """
-    faculties = get_faculties_data()
+    faculties = await get_faculties_data()
     for faculty in faculties:
         if faculty.get(key_to_search) == value_to_search:
             return faculty.get(key_to_return_value)
