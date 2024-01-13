@@ -6,6 +6,8 @@ choose_group_number = "А теперь напиши мне номер своей
 tryAgain_institute_unknownUser = "Что-то я не понял -_-\nВведи корректную аббревиатуру института."
 tryAgain_groupNum_unknownUser = "Не нашёл такой группы :(\nВведи корректный номер группы."
 
+registration_completed = 'Твоё расписание настроено!'
+
 # Расписание
 today_schedule = "Твоё расписание на сегодня:\n\n{0}"
 today_tomorrow_schedule = "Твоё расписание на сегодня и завтра:\n\n{0}\n\n{1}"

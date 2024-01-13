@@ -2,15 +2,13 @@ import re
 import json
 import requests
 
-from src.bot.legacy import User
-
 
 class FacultiesNotFound(Exception):
     def __init__(self, message):
         super().__init__(message)
 
 
-async def parse_institute_selection_page() -> dict:
+def parse_institute_selection_page() -> dict:
     URL = 'https://ruz.spbstu.ru/'
     req = requests.get(URL)
     html_text = req.text
@@ -21,30 +19,30 @@ async def parse_institute_selection_page() -> dict:
     return data
 
 
-async def get_faculties_data() -> list[dict, ...]:
-    data = await parse_institute_selection_page()
+def get_faculties_data() -> list[dict, ...]:
+    data = parse_institute_selection_page()
     faculties_data = data['faculties']['data']
     if not isinstance(faculties_data, list):
         raise FacultiesNotFound("Ошибка хранения информации об институтах в формате 'list[dict, ...]'!")
     return faculties_data
 
 
-async def get_institutes_ids() -> list[int]:
-    faculties = await get_faculties_data()
+def get_institutes_ids() -> list[int]:
+    faculties = get_faculties_data()
     values = [faculty.get('id') for faculty in faculties]
     institutes_ids = [value for value in values if value is not None]
     return institutes_ids
 
 
-async def get_institutes_names() -> list[str]:
-    faculties = await get_faculties_data()
+def get_institutes_names() -> list[str]:
+    faculties = get_faculties_data()
     values = [faculty.get('name') for faculty in faculties]
     institutes_names = [value for value in values if value is not None]
     return institutes_names
 
 
-async def get_institutes_acronyms() -> list[str]:
-    faculties = await get_faculties_data()
+def get_institutes_acronyms() -> list[str]:
+    faculties = get_faculties_data()
     values = [faculty.get('abbr') for faculty in faculties]
     institutes_abbrs = [value for value in values if value is not None]
     return institutes_abbrs
@@ -61,16 +59,13 @@ async def get_value_by_another_key(*,
     :param key_to_search: Ключ, по которому искать
     :param value_to_search: Значение, по которому найти словарь в списке
     :param key_to_return_value: Ключ, по которому вернуть значение из найденного словаря
-
-    >>> user_message_from_keyboard = "ИКНТ"
-    >>> result = get_value_by_another_key('abbr', user_message_from_keyboard, 'id')
     """
-    faculties = await get_faculties_data()
+    faculties = get_faculties_data()
     for faculty in faculties:
         if faculty.get(key_to_search) == value_to_search:
             return faculty.get(key_to_return_value)
 
-
+"""
 async def parse_today_schedule(user: User) -> str:
     ...
 
@@ -85,7 +80,7 @@ async def parse_current_week_schedule(user: User) -> str:
 
 async def parse_next_week_schedule(user: User) -> str:
     ...
-
+"""
 
 """
 def functional_example():
@@ -101,3 +96,11 @@ def functional_example():
     result = find_and_get_value(faculties_list, 'abbr', user_message_from_keyboard, 'name')
     print(result)
 """
+
+
+class ScheduleData:
+    faculties_data: list[dict] = get_faculties_data()
+    institutes_abbrs: list[str] = get_institutes_acronyms()
+
+
+parser = ScheduleData()

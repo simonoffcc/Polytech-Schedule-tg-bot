@@ -1,3 +1,4 @@
-from .parser_methods import *
+from .parser_methods import get_value_by_another_key
+from .parser_methods import parser
 
-__all__ = ('get_institutes_acronyms', 'get_value_by_another_key', 'parse_today_schedule', 'parse_tomorrow_schedule')
+__all__ = ('parser', 'get_value_by_another_key',)

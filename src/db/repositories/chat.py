@@ -20,7 +20,7 @@ class ChatRepo(Repository[Chat]):
         title: str,
         chat_name: str,
         chat_user: _User,
-    ) -> None:
+    ) -> Chat | None:
         """Insert a new user into the database."""
         new_chat = await self.session.merge(
             Chat(
