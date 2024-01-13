@@ -13,7 +13,7 @@ start_router = Router(name='start')
 
 # todo: Если юзера НЕТ в базе
 @start_router.message(CommandStart())
-@start_router.message(F.text.lower() == "начать")
+@start_router.message(F.text.lower() == 'начать')
 async def start_handler_user_not_exists(message: types.Message):
     """Если пользователя нет в базе, то отправляем клавиатуру для выбора института."""
     institutes = await get_institutes_acronyms()
@@ -24,7 +24,7 @@ async def start_handler_user_not_exists(message: types.Message):
 
 # todo: Если юзера ЕСТЬ в базе
 @start_router.message(CommandStart())
-@start_router.message(F.text.lower() == "начать")
+@start_router.message(F.text.lower() == 'начать')
 async def start_handler(message: types.Message):
     """Если пользователь уже есть в базе, то просто отправляем расписание на сегодня."""
     return await message.answer(today_schedule.format('<TODAY_SCHEDULE>'),

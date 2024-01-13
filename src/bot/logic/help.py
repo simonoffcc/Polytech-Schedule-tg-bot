@@ -8,6 +8,6 @@ help_router = Router(name='help')
 
 
 @help_router.message(Command(commands=['help']))
-@help_router.message(F.text == "Помощь")
+@help_router.message(F.text == 'ℹ️ Помощь')
 async def help_handler(message: types.Message):
     return await message.answer(help_text, reply_markup=DEVINFO_BOARD)
