@@ -10,9 +10,9 @@ from .repositories import ChatRepo, UserRepo
 
 
 def create_async_engine(url: URL | str) -> AsyncEngine:
-    """Create async engine with given URL.
+    """Create async engine with given url.
 
-    :param url: URL to connect
+    :param url: url to connect
     :return: AsyncEngine
     """
     return _create_async_engine(url=url, echo=conf.debug, pool_pre_ping=True)
