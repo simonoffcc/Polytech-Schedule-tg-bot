@@ -16,7 +16,7 @@ from src.bot.structures.states import Registration
 
 
 @register_router.message(CommandStart())
-@register_router.message(F.text.lower() == 'начать')
+# @register_router.message(F.text.lower() == 'начать')
 async def start_unknown_user_handler(message: types.Message, state: FSMContext):
     faculties = generate_acronyms_reply_keyboard(parser.institutes_abbrs)
     await message.answer(hi.format(hbold(message.from_user.full_name)), parse_mode='HTML')
