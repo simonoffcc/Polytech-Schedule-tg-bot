@@ -1,9 +1,9 @@
 from aiogram import Router, types, F
 from aiogram.filters import Command
 
-from src.bot.structures.texts import (today_tomorrow_schedule,
-                                      current_week_schedule,
-                                      next_week_schedule)
+from src.bot.structures.message_texts import (today_tomorrow_schedule,
+                                              current_week_schedule,
+                                              next_week_schedule)
 from src.bot.structures.keyboards import MENU_BOARD
 
 get_schedule_router = Router(name='schedule')

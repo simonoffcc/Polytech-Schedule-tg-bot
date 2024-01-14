@@ -6,9 +6,9 @@ from aiogram.fsm.context import FSMContext
 
 from .router import register_router
 from src.parser import parser
-from src.bot.structures.texts import (hi, choose_institute, choose_group_number,
-                                      tryAgain_institute_unknownUser, tryAgain_groupNum_unknownUser,
-                                      registration_completed)
+from src.bot.structures.message_texts import (hi, choose_institute, choose_group,
+                                              try_again_choose_institute, try_again_choose_group,
+                                              registration_completed)
 from src.bot.structures.keyboards import generate_acronyms_reply_keyboard
 from src.bot.structures.keyboards import MENU_BOARD
 
@@ -28,14 +28,14 @@ async def start_unknown_user_handler(message: types.Message, state: FSMContext):
 async def choose_institute_handler(message: types.Message, state: FSMContext):
     await state.update_data(institute=message.text)
     await message.answer(f'Выбран институт: {message.text}', reply_markup=ReplyKeyboardRemove())
-    await message.answer(choose_group_number)
+    await message.answer(choose_group)
     await state.set_state(Registration.choosing_group_number)
 
 
 @register_router.message(Registration.choosing_institute)
 async def unknown_institute_handler(message: types.Message):
     faculties = generate_acronyms_reply_keyboard(parser.institutes_abbrs)
-    await message.answer(tryAgain_institute_unknownUser, reply_markup=faculties)
+    await message.answer(try_again_choose_institute, reply_markup=faculties)
 
 
 @register_router.message(Registration.choosing_group_number)  # todo: свой фильтр на корректность ввода группы
@@ -49,4 +49,4 @@ async def choose_institute_handler(message: types.Message, state: FSMContext):
 
 @register_router.message(Registration.choosing_group_number)
 async def choose_institute_handler(message: types.Message):
-    await message.answer(tryAgain_groupNum_unknownUser)
+    await message.answer(try_again_choose_group)
