@@ -1,4 +1,6 @@
 """User model file."""
+from datetime import datetime
+
 import sqlalchemy as sa
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -25,4 +27,7 @@ class User(Base):
     )
     group_name: Mapped[str] = mapped_column(
         sa.Text, unique=False, nullable=True
+    )
+    reg_date: Mapped[any] = mapped_column(
+        sa.Date, unique=False, nullable=False, default=datetime.today()
     )

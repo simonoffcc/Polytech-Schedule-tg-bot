@@ -51,7 +51,7 @@ class UserRepo(Repository[User]):
             select(User.institute_abbr).where(User.user_id == user_id).limit(1)
         )
 
-    async def user_exists(self, user_id: int) -> bool:
+    async def is_user_exists(self, user_id: int) -> bool:
         """Check if a user with the given user_id exists in the database."""
-        query = select(User.exists())(User.user_id == user_id)
+        query = select(User).where(User.user_id == user_id)
         return await self.session.scalar(query)
