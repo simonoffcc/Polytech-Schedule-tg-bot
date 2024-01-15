@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import create_async_engine as _create_async_engine
 
 from src.configuration import conf
 
-from .repositories import ChatRepo, UserRepo
+from .repositories import UserRepo
 
 
 def create_async_engine(url: URL | str) -> AsyncEngine:
@@ -27,8 +27,6 @@ class Database:
 
     user: UserRepo
     """ User repository """
-    chat: ChatRepo
-    """ Chat repository """
 
     session: AsyncSession
 
@@ -36,14 +34,11 @@ class Database:
         self,
         session: AsyncSession,
         user: UserRepo = None,
-        chat: ChatRepo = None,
     ):
         """Initialize Database class.
 
         :param session: AsyncSession to use
         :param user: (Optional) User repository
-        :param chat: (Optional) Chat repository
         """
         self.session = session
         self.user = user or UserRepo(session=session)
-        self.chat = chat or ChatRepo(session=session)

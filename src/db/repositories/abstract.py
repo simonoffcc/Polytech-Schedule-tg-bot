@@ -43,8 +43,14 @@ class Repository(Generic[AbstractModel]):
         :param whereclause: Clause by which entry will be found
         :return: Model if only one model was found, else None.
         """
+
+        """
         statement = select(self.type_model).where(whereclause)
         return (await self.session.execute(statement)).one_or_none()
+        """
+        statement = select(self.type_model).where(whereclause).limit(1)
+        result = await self.session.execute(statement)
+        return result.scalar()
 
     async def get_many(
         self, whereclause, limit: int = 100, order_by=None

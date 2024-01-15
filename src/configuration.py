@@ -56,7 +56,7 @@ class BotConfig:
 class Configuration:
     """All in one configuration's class."""
 
-    debug = bool(getenv('DEBUG'))
+    debug = bool(getenv('DEBUG', 1))
     logging_level = int(getenv('LOGGING_LEVEL', logging.INFO))
 
     db = DatabaseConfig()

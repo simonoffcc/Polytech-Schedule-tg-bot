@@ -1,11 +1,10 @@
 """User repository file."""
 
-from sqlalchemy import select
+from sqlalchemy import select, exists
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.exc import NoResultFound
 
-from src.bot.structures.role import Role
-
-from ..models import Base, User
+from ..models import User
 from .abstract import Repository
 
 
@@ -20,39 +19,43 @@ class UserRepo(Repository[User]):
         self,
         user_id: int,
         user_name: str | None = None,
-        first_name: str | None = None,
-        second_name: str | None = None,
-        language_code: str | None = None,
-        is_premium: bool | None = False,
-        role: Role | None = Role.USER,
-        user_chat: type[Base] = None,
+        institute_id: int | None = None,
+        group_id: int | None = None,
+        institute_abbr: str | None = None,
+        group_name: str | None = None,
     ) -> None:
-        """Insert a new user into the database.
+        """ Insert a new user into the database.
 
-        :param user_id: Telegram user id
-        :param user_name: Telegram username
-        :param first_name: Telegram profile first name
-        :param second_name: Telegram profile second name
-        :param language_code: Telegram profile language code
-        :param is_premium: Telegram user premium status
-        :param role: User's role
-        :param user_chat: Telegram chat with user.
+        :param user_id:
+        :param user_name:
+        :param institute_id:
+        :param group_id:
+        :param institute_abbr:
+        :param group_name:
+        :return:
         """
         await self.session.merge(
             User(
                 user_id=user_id,
                 user_name=user_name,
-                first_name=first_name,
-                second_name=second_name,
-                language_code=language_code,
-                is_premium=is_premium,
-                role=role,
-                user_chat=user_chat,
+                institute_id=institute_id,
+                group_id=group_id,
+                institute_abbr=institute_abbr,
+                group_name=group_name,
             )
         )
 
-    async def get_role(self, user_id: int) -> Role:
-        """Get user role by id."""
+    async def get_institute_abbr(self, user_id: int) -> str | None:
+        """Get user institute by telegram id."""
         return await self.session.scalar(
-            select(User.role).where(User.user_id == user_id).limit(1)
+            select(User.institute_abbr).where(User.user_id == user_id).limit(1)
         )
+
+    async def user_exists(self, user_id: int) -> bool:
+        """Check if a user exists in the database."""
+        try:
+            query = select(exists().where(User.user_id == user_id))
+            result = await self.session.scalar(query)
+            return result
+        except NoResultFound:
+            return False
