@@ -52,10 +52,6 @@ class UserRepo(Repository[User]):
         )
 
     async def user_exists(self, user_id: int) -> bool:
-        """Check if a user exists in the database."""
-        try:
-            query = select(exists().where(User.user_id == user_id))
-            result = await self.session.scalar(query)
-            return result
-        except NoResultFound:
-            return False
+        """Check if a user with the given user_id exists in the database."""
+        query = select(User.exists())(User.user_id == user_id)
+        return await self.session.scalar(query)

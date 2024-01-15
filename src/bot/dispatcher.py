@@ -10,7 +10,7 @@ from redis.asyncio.client import Redis
 from src.configuration import conf
 
 from .logic import routers
-from .middlewares import outer_middlewares, DatabaseMiddleware
+from .middlewares import DatabaseMiddleware
 
 
 def get_redis_storage(
@@ -42,8 +42,6 @@ def get_dispatcher(
     for router in routers:
         dp.include_router(router)
 
-    # for middleware in outer_middlewares:
-    #     dp.update.outer_middleware(middleware)
     dp.update.outer_middleware(DatabaseMiddleware())
 
     return dp

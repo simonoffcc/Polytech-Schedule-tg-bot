@@ -18,4 +18,3 @@ class TransferData(TypedDict):
     engine: AsyncEngine
     db: Database
     bot: Bot
-    is_register: bool
