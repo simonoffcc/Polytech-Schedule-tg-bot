@@ -10,6 +10,7 @@ from redis.asyncio.client import Redis
 from src.configuration import conf
 
 from .logic import routers
+from .middlewares import outer_middlewares, DatabaseMiddleware
 
 
 def get_redis_storage(
@@ -32,7 +33,7 @@ def get_dispatcher(
     fsm_strategy: FSMStrategy | None = FSMStrategy.CHAT,
     event_isolation: BaseEventIsolation | None = None,
 ):
-    """This function set up dispatcher with routers, filters and middlewares."""
+    """This function set up dispatcher with routers, filters and outer_middlewares."""
     dp = Dispatcher(
         storage=storage,
         fsm_strategy=fsm_strategy,
@@ -41,6 +42,8 @@ def get_dispatcher(
     for router in routers:
         dp.include_router(router)
 
-    # Register middlewares
+    # for middleware in outer_middlewares:
+    #     dp.update.outer_middleware(middleware)
+    dp.update.outer_middleware(DatabaseMiddleware())
 
     return dp

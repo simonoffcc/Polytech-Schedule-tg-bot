@@ -8,7 +8,7 @@ from src.bot.filters import CorrectGroupFormat
 from .router import register_router
 from src.bot.structures.message_texts import (hi, choose_institute, choose_group,
                                               try_again_choose_institute, try_again_choose_group,
-                                              registration_completed)
+                                              schedule_is_set)
 from src.parser import parser
 from src.bot.structures.keyboards import generate_acronyms_reply_keyboard
 from src.bot.structures.keyboards import MENU_BOARD
@@ -42,10 +42,12 @@ async def unknown_institute_handler(message: types.Message):
 @register_router.message(Registration.choosing_group_number, CorrectGroupFormat())
 async def choose_institute_handler(message: types.Message, state: FSMContext):
     await state.update_data(group_num=message.text)
-    # todo: если страница существует, добавляем пользователя в базу
+    # todo: существует ли страница
+    reg = await state.get_data()
+    await message.answer(f"Выбран институт: {reg['institute']}.\n"
+                         f"Выбрана группа: {reg['group_num']}.")
     await state.clear()
-    await message.answer(f'Выбран номер группы: {message.text}')
-    return await message.answer(registration_completed, reply_markup=MENU_BOARD)
+    return await message.answer(schedule_is_set, reply_markup=MENU_BOARD)
 
 
 @register_router.message(Registration.choosing_group_number, ~CorrectGroupFormat())

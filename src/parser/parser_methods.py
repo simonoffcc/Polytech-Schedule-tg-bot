@@ -13,6 +13,8 @@ class DataNotFound(Exception):
 
 def parse_institute_selection_page() -> dict:
     req = requests.get(URL)
+    if req.status_code != 200:
+        raise ValueError(f"Ошибка при запросе: {req.status_code}")
     html_text = req.text
     data = re.search(r'window.__INITIAL_STATE__ = ({.+});', html_text)
     if not data:
@@ -24,6 +26,8 @@ def parse_institute_selection_page() -> dict:
 def parse_group_selection_page(institute_id: int) -> dict:
     url = f'https://ruz.spbstu.ru/faculty/{institute_id}/groups/'
     req = requests.get(url)
+    if req.status_code != 200:
+        raise ValueError(f"Ошибка при запросе: {req.status_code}")
     html_text = req.text
     data = re.search(r'window.__INITIAL_STATE__ = ({.+});', html_text)
     if not data:
