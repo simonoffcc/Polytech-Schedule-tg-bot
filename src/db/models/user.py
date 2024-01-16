@@ -28,6 +28,6 @@ class User(Base):
     group_name: Mapped[str] = mapped_column(
         sa.Text, unique=False, nullable=True
     )
-    reg_date: Mapped[any] = mapped_column(
-        sa.Date, unique=False, nullable=False, default=datetime.today()
+    reg_date: Mapped[datetime] = mapped_column(
+        sa.DateTime, unique=False, nullable=False, default=datetime.now()
     )

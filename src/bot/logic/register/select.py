@@ -1,13 +1,15 @@
 from aiogram import types, F
-from aiogram.filters import CommandStart
+from aiogram.filters import CommandStart, StateFilter
 from aiogram.types import ReplyKeyboardRemove
 from aiogram.utils.markdown import hbold
 from aiogram.fsm.context import FSMContext
 
-from src.bot.filters import CorrectGroupFormat
+from src.bot.filters import CorrectGroupFormat, RegisterFilter
+from src.db import Database
 from .router import register_router
 from src.bot.structures.message_texts import (hi, choose_institute, choose_group,
                                               try_again_choose_institute, try_again_choose_group,
+                                              try_valid_value_choose_group,
                                               schedule_is_set)
 from src.parser import parser
 from src.bot.structures.keyboards import generate_acronyms_reply_keyboard
@@ -16,7 +18,7 @@ from src.bot.structures.keyboards import MENU_BOARD
 from src.bot.structures.states import Registration
 
 
-@register_router.message(CommandStart())
+@register_router.message(StateFilter(None), CommandStart(), ~RegisterFilter())
 @register_router.message(F.text.lower() == 'начать')
 async def start_unknown_user_handler(message: types.Message, state: FSMContext):
     await state.set_state(Registration.choosing_institute)
@@ -40,10 +42,18 @@ async def unknown_institute_handler(message: types.Message):
 
 
 @register_router.message(Registration.choosing_group_number, CorrectGroupFormat())
-async def choose_institute_handler(message: types.Message, state: FSMContext):
+async def choose_institute_handler(message: types.Message, state: FSMContext, **kwargs):
     await state.update_data(group_num=message.text)
-    # todo: существует ли страница
     reg = await state.get_data()
+    db: Database = kwargs.get('db')
+    await db.user.new(
+        user_id=message.from_user.id,
+        user_name=message.from_user.full_name,
+        institute_id=100,               # todo: get_key_by_another_value(reg['institute'])
+        group_id=38574,                 # todo: get_key_by_another_value(reg['group_num'])
+        institute_abbr=reg['institute'],
+        group_name=reg['group_num']
+    )
     await message.answer(f"Выбран институт: {reg['institute']}.\n"
                          f"Выбрана группа: {reg['group_num']}.")
     await state.clear()
@@ -52,4 +62,4 @@ async def choose_institute_handler(message: types.Message, state: FSMContext):
 
 @register_router.message(Registration.choosing_group_number, ~CorrectGroupFormat())
 async def choose_institute_handler(message: types.Message):
-    return await message.answer(try_again_choose_group)
+    return await message.answer(try_valid_value_choose_group)

@@ -1,5 +1,6 @@
 """User repository file."""
 
+from datetime import datetime
 from sqlalchemy import select, exists
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import NoResultFound
@@ -23,6 +24,7 @@ class UserRepo(Repository[User]):
         group_id: int | None = None,
         institute_abbr: str | None = None,
         group_name: str | None = None,
+        reg_date: datetime = datetime.now(),
     ) -> None:
         """ Insert a new user into the database.
 
@@ -32,6 +34,7 @@ class UserRepo(Repository[User]):
         :param group_id:
         :param institute_abbr:
         :param group_name:
+        :param reg_date:
         :return:
         """
         await self.session.merge(
@@ -42,16 +45,16 @@ class UserRepo(Repository[User]):
                 group_id=group_id,
                 institute_abbr=institute_abbr,
                 group_name=group_name,
+                reg_date=reg_date,
             )
         )
 
     async def get_institute_abbr(self, user_id: int) -> str | None:
         """Get user institute by telegram id."""
-        return await self.session.scalar(
-            select(User.institute_abbr).where(User.user_id == user_id).limit(1)
-        )
+        query = select(User.institute_abbr).where(User.user_id == user_id).limit(1)
+        return await self.session.scalar(query)
 
     async def is_user_exists(self, user_id: int) -> bool:
         """Check if a user with the given user_id exists in the database."""
-        query = select(User).where(User.user_id == user_id)
+        query = select(exists().where(User.user_id == user_id))
         return await self.session.scalar(query)
