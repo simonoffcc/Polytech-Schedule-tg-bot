@@ -49,7 +49,7 @@ async def choose_institute_handler(message: types.Message, state: FSMContext, **
     await db.user.new(
         user_id=message.from_user.id,
         user_name=message.from_user.full_name,
-        institute_id=100,               # todo: get_key_by_another_value(reg['institute'])
+        institute_id=125,               # todo: get_key_by_another_value(reg['institute'])
         group_id=38574,                 # todo: get_key_by_another_value(reg['group_num'])
         institute_abbr=reg['institute'],
         group_name=reg['group_num']

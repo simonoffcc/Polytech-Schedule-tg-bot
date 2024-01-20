@@ -3,7 +3,6 @@
 from datetime import datetime
 from sqlalchemy import select, exists
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.exc import NoResultFound
 
 from ..models import User
 from .abstract import Repository

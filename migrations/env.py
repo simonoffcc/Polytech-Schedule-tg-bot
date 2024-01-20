@@ -98,7 +98,7 @@ async def run_migrations_online() -> None:
     except ProgrammingError as pe:
         raise MigrationError(str(pe))
     except Exception as e:
-        raise FailedConnectToDatabase(url_info=connectable.url, other=e)
+        raise FailedConnectToDatabase(url_info=str(connectable.url), other=str(e))
     finally:
         await connectable.dispose()
 
