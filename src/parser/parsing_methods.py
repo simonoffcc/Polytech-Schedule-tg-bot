@@ -1,12 +1,14 @@
 import re
 import json
+from typing import Union
+
 import requests
 from datetime import datetime
 
 
 BASE_URL = 'https://ruz.spbstu.ru/'
 GROUPS_URL = 'https://ruz.spbstu.ru/faculty/{0}/groups/'
-PERSONALIZED_URL = 'https://ruz.spbstu.ru/faculty/{0}}/groups/{1}?date={2}'  # YYYY-MM-DD
+PERSONALIZED_URL = 'https://ruz.spbstu.ru/faculty/{0}/groups/{1}?date={2}'  # YYYY-MM-DD
 
 
 class DataNotFound(Exception):
@@ -40,23 +42,17 @@ async def _parse_group_selection_page(institute_id: int) -> dict:
     return data
 
 
-"""
-def parse_today_schedule(user) -> str:
-    ...
+async def _parse_week_schedule(faculty_id: int, group_id: int, date: Union[datetime, str] = None) -> dict:
+    """Функция, которая парсит расписание на всю неделю, в которой содержится указанная дата."""
+    if not date:
+        date = datetime.now()
+        date = date.strftime('%Y-%m-%d')
+    if isinstance(date, str):
+        date = datetime.strptime(date, '%Y-%m-%d')
+    if isinstance(date, datetime):
+        date = date.strftime('%Y-%m-%d')
 
-
-def parse_tomorrow_schedule(user) -> str:
-    ...
-
-
-def parse_next_week_schedule(user) -> str:
-    ...
-"""
-
-
-async def _parse_current_week_schedule(faculty_id: int, group_id: int) -> dict:
-    """Функция, которая парсит расписание на текущую неделю"""
-    url = PERSONALIZED_URL.format(faculty_id, group_id, datetime.now().strftime('%Y-%m-%d'))
+    url = PERSONALIZED_URL.format(faculty_id, group_id, date)
     req = requests.get(url)
     if req.status_code != 200:
         raise ValueError(f"Ошибка при запросе по ссылке ({url}): {req.status_code}")
@@ -66,3 +62,17 @@ async def _parse_current_week_schedule(faculty_id: int, group_id: int) -> dict:
         raise DataNotFound("Данные о расписании из 'window.__INITIAL_STATE__' не найдены!")
     data = json.loads(data.group(1))
     return data
+
+
+"""
+async def _parse_today_schedule(user) -> str:
+    ...
+
+
+async def _parse_tomorrow_schedule(user) -> str:
+    ...
+
+
+async def _parse_next_week_schedule(user) -> str:
+    ...
+"""

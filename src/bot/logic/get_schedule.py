@@ -5,6 +5,7 @@ from src.bot.structures.message_texts import (today_tomorrow_schedule,
                                               current_week_schedule,
                                               next_week_schedule)
 from src.bot.structures.keyboards import MENU_BOARD
+from src.parser import get_week_schedule_str
 
 get_schedule_router = Router(name='schedule')
 
@@ -19,7 +20,8 @@ async def today_tomorrow_command_handler(message: types.Message):
 @get_schedule_router.message(Command(commands=['week']))
 @get_schedule_router.message(F.text == 'Текущая неделя')
 async def week_command_handler(message: types.Message):
-    return await message.answer(current_week_schedule.format('<CURRENT WEEK SCHEDULE>'),
+    string = await get_week_schedule_str(125, 38645, '2023-11-27')
+    return await message.answer(current_week_schedule.format(string),
                                 reply_markup=MENU_BOARD)
 
 

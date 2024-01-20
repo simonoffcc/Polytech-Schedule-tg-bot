@@ -1,7 +1,8 @@
 """This file represent startup bot logic."""
+import sys
+import locale
 import asyncio
 import logging
-import sys
 
 from aiogram import Bot
 from redis.asyncio.client import Redis
@@ -36,4 +37,8 @@ async def start_bot():
 
 if __name__ == '__main__':
     logging.basicConfig(level=conf.logging_level, stream=sys.stdout)
+    locale.setlocale(
+        category=locale.LC_ALL,
+        locale="Russian"
+    )
     asyncio.run(start_bot())
