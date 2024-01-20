@@ -1,0 +1,83 @@
+[
+    {
+        "id": 36573,
+        "name": "4244901/20101_2022",
+        "level": 2,
+        "type": "common",
+        "kind": 1,
+        "spec": "",
+        "year": 2023
+    },
+    {
+        "id": 39334,
+        "name": "4244901/20101",
+        "level": 2,
+        "type": "common",
+        "kind": 1,
+        "spec": "",
+        "year": 2023
+    },
+    {
+        "id": 36891,
+        "name": "\u04374244901/20101_2022",
+        "level": 2,
+        "type": "distance",
+        "kind": 1,
+        "spec": "",
+        "year": 2023
+    },
+    {
+        "id": 39519,
+        "name": "\u04374244901/30101",
+        "level": 1,
+        "type": "distance",
+        "kind": 1,
+        "spec": "",
+        "year": 2023
+    },
+    {
+        "id": 39310,
+        "name": "4244901/30101",
+        "level": 1,
+        "type": "common",
+        "kind": 1,
+        "spec": "",
+        "year": 2023
+    },
+    {
+        "id": 37018,
+        "name": "\u04374244901/10101_2022",
+        "level": 3,
+        "type": "distance",
+        "kind": 1,
+        "spec": "",
+        "year": 2023
+    },
+    {
+        "id": 39311,
+        "name": "4244901/30201",
+        "level": 1,
+        "type": "common",
+        "kind": 1,
+        "spec": "",
+        "year": 2023
+    },
+    {
+        "id": 39670,
+        "name": "\u04374244901/20101",
+        "level": 2,
+        "type": "distance",
+        "kind": 1,
+        "spec": "",
+        "year": 2023
+    },
+    {
+        "id": 36574,
+        "name": "4244901/10101_2022",
+        "level": 3,
+        "type": "common",
+        "kind": 1,
+        "spec": "",
+        "year": 2023
+    }
+]

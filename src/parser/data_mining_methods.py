@@ -1,50 +1,14 @@
-import asyncio
-import re
 import json
-import requests
+import asyncio
 
 
-BASE_URL = 'https://ruz.spbstu.ru/'
-GROUPS_URL = 'https://ruz.spbstu.ru/faculty/{0}/groups/'
-PERSONALIZED_URL = 'https://ruz.spbstu.ru/faculty/{0}/groups/{1}'  # default week where date is the first day
-PERSONALIZED_DATE_URL = 'https://ruz.spbstu.ru/faculty/{0}}/groups/{1}?date={2}'  # YYYY-MM-DD
-
-
-class DataNotFound(Exception):
-    def __init__(self, message):
-        super().__init__(message)
-
-
-async def parse_institute_selection_page() -> dict:
-    url = BASE_URL
-    req = requests.get(url)
-    if req.status_code != 200:
-        raise ValueError(f"Ошибка при запросе по ссылке ({url}): {req.status_code}")
-    html_text = req.text
-    data = re.search(r'window.__INITIAL_STATE__ = ({.+});', html_text)
-    if not data:
-        raise DataNotFound("Информация об институтах из 'window.__INITIAL_STATE__' не найдена!")
-    data = json.loads(data.group(1))
-    return data
-
-
-async def parse_group_selection_page(institute_id: int) -> dict:
-    url = GROUPS_URL.format(institute_id)
-    req = requests.get(url)
-    if req.status_code != 200:
-        raise ValueError(f"Ошибка при запросе по ссылке: {url} к {institute_id} "
-                         f"({get_value_by_another_key('id', institute_id, 'abbr')}): "
-                         f"{req.status_code}")
-    html_text = req.text
-    data = re.search(r'window.__INITIAL_STATE__ = ({.+});', html_text)
-    if not data:
-        raise DataNotFound("Информация о группах из 'window.__INITIAL_STATE__' не найдена!")
-    data = json.loads(data.group(1))
-    return data
+from .parsing_methods import (_parse_institute_selection_page,
+                              _parse_group_selection_page,
+                              _parse_current_week_schedule)
 
 
 async def get_institutes_data() -> list[dict]:
-    data = await parse_institute_selection_page()
+    data = await _parse_institute_selection_page()
     institutes_data = data['faculties']['data']
     if not isinstance(institutes_data, list):
         raise TypeError("Ошибка хранения информации об институтах в формате 'list[dict, ...]'!")
@@ -52,7 +16,7 @@ async def get_institutes_data() -> list[dict]:
 
 
 async def get_groups_data(institute_id: int) -> list[dict]:
-    data = await parse_group_selection_page(institute_id)
+    data = await _parse_group_selection_page(institute_id)
     groups_data = data['groups']['data'][str(institute_id)]
     if not isinstance(groups_data, list):
         raise TypeError("Ошибка хранения информации о группах в формате 'list[dict,...]'!")
@@ -75,7 +39,7 @@ async def get_value_by_another_key(key_to_search: str,
                                    value_to_search: str | int,
                                    key_to_return_value: str) -> int | str | None:
     """
-    Метод, который позволяет получить информацию из списка словарей по заданному ключу,
+    Универсальный метод, который позволяет получить информацию из списка словарей по заданному ключу,
     в котором содержится переданное значение, относящееся к другому ключу.
 
     :param key_to_search: Ключ, по которому искать
@@ -95,22 +59,9 @@ async def get_institutes_names() -> list[str]:
     return institutes_names
 
 
-"""
-def parse_today_schedule(user) -> str:
-    ...
-
-
-def parse_tomorrow_schedule(user) -> str:
-    ...
-
-
-def parse_next_week_schedule(user) -> str:
-    ...
-"""
-
-
-async def parse_current_week_schedule(user_faculty, user_group) -> dict:
-    ...
+async def convert_data_from_dict_to_str(data: dict) -> str:
+    """Функция, которая преобразует данные из словаря в строку"""
+    return '\n'.join(f"{key}: {value}" for key, value in data.items())
 
 
 async def write_institutes_data() -> None:

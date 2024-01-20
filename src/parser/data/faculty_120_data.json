@@ -1,0 +1,65 @@
+[
+    {
+        "id": 36237,
+        "name": "1951402/80101_2022",
+        "level": 6,
+        "type": "common",
+        "kind": 2,
+        "spec": "",
+        "year": 2023
+    },
+    {
+        "id": 36234,
+        "name": "1951402/10101_2023",
+        "level": 3,
+        "type": "common",
+        "kind": 2,
+        "spec": "",
+        "year": 2023
+    },
+    {
+        "id": 36238,
+        "name": "1951402/70101_2022",
+        "level": 7,
+        "type": "common",
+        "kind": 2,
+        "spec": "",
+        "year": 2023
+    },
+    {
+        "id": 36236,
+        "name": "1951402/90101_2022",
+        "level": 5,
+        "type": "common",
+        "kind": 2,
+        "spec": "",
+        "year": 2023
+    },
+    {
+        "id": 36235,
+        "name": "1951402/00101_2022",
+        "level": 4,
+        "type": "common",
+        "kind": 2,
+        "spec": "",
+        "year": 2023
+    },
+    {
+        "id": 36233,
+        "name": "1951402/20001_2022",
+        "level": 2,
+        "type": "common",
+        "kind": 2,
+        "spec": "",
+        "year": 2023
+    },
+    {
+        "id": 39375,
+        "name": "1951402/30001_2023",
+        "level": 1,
+        "type": "common",
+        "kind": 2,
+        "spec": "",
+        "year": 2023
+    }
+]
