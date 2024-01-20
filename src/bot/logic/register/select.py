@@ -11,7 +11,7 @@ from src.bot.structures.message_texts import (hi, choose_institute, choose_group
                                               try_again_choose_institute, try_again_choose_group,
                                               try_valid_value_choose_group,
                                               schedule_is_set)
-from src.parser import parser
+from src.parser import institutes_acronyms
 from src.bot.structures.keyboards import generate_acronyms_reply_keyboard
 from src.bot.structures.keyboards import MENU_BOARD
 
@@ -23,11 +23,11 @@ from src.bot.structures.states import Registration
 async def start_unknown_user_handler(message: types.Message, state: FSMContext):
     await state.set_state(Registration.choosing_institute)
     await message.answer(hi.format(hbold(message.from_user.full_name)), parse_mode='HTML')
-    faculties = generate_acronyms_reply_keyboard(parser.institutes_abbrs)
+    faculties = generate_acronyms_reply_keyboard()
     return await message.answer(choose_institute, reply_markup=faculties)
 
 
-@register_router.message(Registration.choosing_institute, F.text.in_(parser.institutes_abbrs))
+@register_router.message(Registration.choosing_institute, F.text.in_(institutes_acronyms))
 async def choose_institute_handler(message: types.Message, state: FSMContext):
     await state.update_data(institute=message.text)
     await state.set_state(Registration.choosing_group_number)
@@ -37,7 +37,7 @@ async def choose_institute_handler(message: types.Message, state: FSMContext):
 
 @register_router.message(Registration.choosing_institute)
 async def unknown_institute_handler(message: types.Message):
-    faculties = generate_acronyms_reply_keyboard(parser.institutes_abbrs)
+    faculties = generate_acronyms_reply_keyboard()
     return await message.answer(try_again_choose_institute, reply_markup=faculties)
 
 

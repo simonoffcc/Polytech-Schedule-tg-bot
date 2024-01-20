@@ -32,7 +32,7 @@ config.set_main_option('sqlalchemy.url', conf.db.build_connection_str())
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode.
 
-    This configures the context with just a URL
+    This configures the context with just a BASE_URL
     and not an Engine, though an Engine is acceptable
     here as well.  By skipping the Engine creation
     we don't even need a DBAPI to be available.
