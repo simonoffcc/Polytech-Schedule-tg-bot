@@ -75,7 +75,6 @@ fabric.properties
 ### Python template
 # Byte-compiled / optimized / DLL files
 __pycache__/
-*.py[cod]
 *$py.class
 
 # C extensions
@@ -125,6 +124,10 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 cover/
+
+# Translations
+*.mo
+*.pot
 
 # Django stuff:
 *.log
@@ -207,4 +210,3 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
-

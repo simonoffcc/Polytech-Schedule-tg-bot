@@ -15,6 +15,8 @@ FROM python-base as app
 
 COPY --from=poetry-base ${POETRY_VENV} ${POETRY_VENV}
 ENV PATH="${PATH}:${POETRY_VENV}/bin"
+ENV LANG ru_RU.UTF-8
+ENV LC_ALL ru_RU.UTF-8
 
 WORKDIR /app
 COPY poetry.lock pyproject.toml ./
