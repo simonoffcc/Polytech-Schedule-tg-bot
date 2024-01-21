@@ -1,6 +1,5 @@
 """This file represent startup bot logic."""
 import sys
-import locale
 import asyncio
 import logging
 
@@ -16,7 +15,6 @@ from src.db.database import create_async_engine
 async def start_bot():
     """This function will start bot with polling mode."""
     bot = Bot(token=conf.bot.token)
-    await bot.delete_webhook(drop_pending_updates=True)
     storage = get_redis_storage(
         redis=Redis(
             db=conf.redis.db,
@@ -27,6 +25,7 @@ async def start_bot():
         )
     )
     dp = get_dispatcher(storage=storage)
+    await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(
         bot,
         allowed_updates=dp.resolve_used_update_types(),
@@ -38,5 +37,4 @@ async def start_bot():
 
 if __name__ == '__main__':
     logging.basicConfig(level=conf.logging_level, stream=sys.stdout)
-    locale.setlocale(locale.LC_ALL, 'ru_RU.UTF-8')
     asyncio.run(start_bot())
