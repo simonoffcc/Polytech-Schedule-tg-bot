@@ -1,4 +1,4 @@
-PHONY: help
+.PHONY: help
 help:
 	@echo "USAGE"
 	@echo "  make <commands>"
@@ -7,27 +7,7 @@ help:
 	@echo "  run		Start the bot (for docker-compose usage)"
 	@echo "  project-start Start with docker-compose"
 	@echo "  project-stop  Stop docker-compose"
-	@echo "  lint		Reformat code"
 	@echo "  requirements  Export poetry.lock to requirements.txt"
-
-.PHONY:	blue
-blue:
-	poetry run blue src/ tests/
-
-.PHONY:	mypy
-mypy:
-	poetry run mypy --strict --pretty --explicit-package-bases --install-types src/ tests/
-
-.PHONY: isort
-isort:
-	poetry run isort src/ tests/
-
-.PHONY: ruff
-ruff:
-	poetry run ruff check src/ tests/ --fix --respect-gitignore
-
-.PHONY: lint
-lint: blue isort ruff mypy
 
 .PHONY: run
 run:

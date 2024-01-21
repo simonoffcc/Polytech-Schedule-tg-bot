@@ -70,7 +70,7 @@ async def temp(faculty_id: int = 125, group_id: int = 38645, date: str = '2023-1
 
 async def get_week_schedule_str(faculty_id: int, group_id: int,
                                 date: Union[datetime, str]) -> str:
-    # todo: переделать метод, чтобы преобразовывал строку под html или markdown парсинг
+    # todo: переделать метод, чтобы преобразовывал строку под html/markdown парсинг
     data = await _parse_week_schedule(faculty_id=faculty_id, group_id=group_id, date=date)
     weekdays_data = data['lessons']['data'][f'{group_id}']  # list[dict] - every weekday info
     if not isinstance(weekdays_data, list):
