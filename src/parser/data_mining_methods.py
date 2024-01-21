@@ -98,12 +98,3 @@ async def get_week_schedule_str(faculty_id: int, group_id: int,
     return '\n'.join(generated_string)
 
 institutes_acronyms: list[str] = asyncio.run(get_institutes_abbrs())
-
-
-if __name__ == '__main__':
-    # locale.setlocale(locale.LC_ALL, "")  # linux
-
-    asyncio.run(temp())
-    string = asyncio.run(get_week_schedule_str(125, 38645, '2023-11-27'))
-    print(string)
-
