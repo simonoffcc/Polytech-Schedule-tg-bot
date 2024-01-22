@@ -1,4 +1,4 @@
-FROM python:3.11.7-bookworm as python-base
+FROM python:3.11-slim as python-base
 
 ENV POETRY_VERSION=1.5.1 \
     POETRY_HOME=/opt/poetry \
