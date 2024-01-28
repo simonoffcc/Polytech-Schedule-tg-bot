@@ -1,4 +1,6 @@
 from .register_filter import RegisterFilter
+from .existing_institute import IsInstituteExists
 from .correct_group_format import CorrectGroupFormat
+from .existing_group import IsGroupExists
 
-__all__ = ('CorrectGroupFormat', 'RegisterFilter')
+__all__ = ('RegisterFilter', 'CorrectGroupFormat', 'IsInstituteExists', 'IsGroupExists')
