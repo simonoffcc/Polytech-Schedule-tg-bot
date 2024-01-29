@@ -3,7 +3,7 @@ from aiogram.utils.keyboard import KeyboardBuilder
 from src.parser.data_mining_methods import institutes_acronyms
 
 
-def generate_acronyms_reply_keyboard() -> ReplyKeyboardMarkup:
+async def generate_acronyms_reply_keyboard() -> ReplyKeyboardMarkup:
     builder = KeyboardBuilder(button_type=KeyboardButton)
     for abbr in institutes_acronyms:
         builder.add(KeyboardButton(text=str(abbr)))
