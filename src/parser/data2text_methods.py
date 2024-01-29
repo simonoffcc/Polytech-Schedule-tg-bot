@@ -29,7 +29,7 @@ async def turn_day_to_str(day_data: dict) -> str:
 
 
 async def get_week_schedule_str(faculty_id: int, group_id: int,
-                                date: Union[datetime, str]) -> str:
+                                date: Union[datetime, str] = None) -> str:
     # todo: метод сам по себе плохой, ибо если на всей недели расписание,
     #  то сообщение будет очень большим и нечитаемым.
     #  Поэтому нужно стремиться к решению, как здесь: https://t.me/misis_sch_bot
@@ -37,13 +37,14 @@ async def get_week_schedule_str(faculty_id: int, group_id: int,
     weekdays_data = await get_week_schedule_data(faculty_id=faculty_id, group_id=group_id, date=date)
     generated_string = []
     for weekday in weekdays_data:
+        # todo: заполнить дни без пар текстом "Пар не запланировано."
+        # todo: решить проблему с разметкой и пробелами между предметами
         generated_string.append(await turn_day_to_str(weekday))
     return '\n'.join(generated_string)
 
 
 async def get_today_schedule_str(faculty_id: int, group_id: int) -> str:
     today_date = datetime.now().strftime('%Y-%m-%d')
-    today_date = '2023-11-25'
     weekdays_data = await get_week_schedule_data(faculty_id=faculty_id, group_id=group_id, date=today_date)
     today_data = None
     for weekday in weekdays_data:
@@ -54,7 +55,7 @@ async def get_today_schedule_str(faculty_id: int, group_id: int) -> str:
         date_object = datetime.strptime(today_date, '%Y-%m-%d')
         date_and_month = date_object.strftime('%d %b')
         day_of_week = date_object.strftime('%a')
-        return f"{date_and_month}, {day_of_week.lower()}\nПар нет!\n"
+        return f"{date_and_month}, {day_of_week.lower()}\nПар не запланировано.\n"
 
     result = await turn_day_to_str(today_data)
     return result
@@ -63,7 +64,6 @@ async def get_today_schedule_str(faculty_id: int, group_id: int) -> str:
 async def get_tomorrow_schedule_str(faculty_id: int, group_id: int) -> str:
     tomorrow = datetime.now() + timedelta(days=1)
     tomorrow_date = tomorrow.strftime("%Y-%m-%d")
-    tomorrow_date = '2023-11-25'
     weekdays_data = await get_week_schedule_data(faculty_id=faculty_id, group_id=group_id, date=tomorrow_date)
     today_data = None
     for weekday in weekdays_data:
@@ -74,7 +74,7 @@ async def get_tomorrow_schedule_str(faculty_id: int, group_id: int) -> str:
         date_object = datetime.strptime(tomorrow_date, '%Y-%m-%d')
         date_and_month = date_object.strftime('%d %b')
         day_of_week = date_object.strftime('%a')
-        return f"{date_and_month}, {day_of_week.lower()}\nПар нет!"
+        return f"{date_and_month}, {day_of_week.lower()}\nПар не запланировано."
     result = await turn_day_to_str(today_data)
     return result
 

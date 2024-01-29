@@ -25,7 +25,7 @@ async def today_tomorrow_command_handler(message: types.Message):
 async def week_command_handler(message: types.Message):
     return await message.answer(
         current_week_schedule.format(
-            await get_week_schedule_str(125, 38645, '2023-11-27')),
+            await get_week_schedule_str(125, 38645)),
         reply_markup=MENU_BOARD)
 
 
