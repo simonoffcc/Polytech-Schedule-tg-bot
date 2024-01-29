@@ -9,7 +9,7 @@ from src.parser.data_mining_methods import get_week_schedule_data
 async def turn_day_to_str(day_data: dict) -> str:
     day_str = ''
     date_object = datetime.strptime(day_data['date'], '%Y-%m-%d')
-    date_and_month = date_object.strftime('%d %b.')
+    date_and_month = date_object.strftime('%d %b')
     day_of_week = date_object.strftime('%a')
     day_str += f'{date_and_month}, {day_of_week.lower()}\n'
     for lesson in day_data['lessons']:
@@ -17,7 +17,9 @@ async def turn_day_to_str(day_data: dict) -> str:
         day_str += f"{lesson['subject']}\n"
         if lesson['typeObj']['name']:
             day_str += f"{lesson['typeObj']['name']}\n"
-        day_str += f"{', '.join([group['name'] for group in lesson['groups']])}\n"
+        # todo: переделать логику, ибо большое кол-во групп захламляет оформление сообщения.
+        #  При этом, информация об этих группах может быть полезной.
+        # day_str += f"{', '.join([group['name'] for group in lesson['groups']])}\n"
         if lesson['teachers']:
             day_str += f"{', '.join([teacher['full_name'] for teacher in lesson['teachers']])}\n"
         if lesson['lms_url']:
@@ -41,6 +43,7 @@ async def get_week_schedule_str(faculty_id: int, group_id: int,
 
 async def get_today_schedule_str(faculty_id: int, group_id: int) -> str:
     today_date = datetime.now().strftime('%Y-%m-%d')
+    today_date = '2023-11-25'
     weekdays_data = await get_week_schedule_data(faculty_id=faculty_id, group_id=group_id, date=today_date)
     today_data = None
     for weekday in weekdays_data:
@@ -48,7 +51,11 @@ async def get_today_schedule_str(faculty_id: int, group_id: int) -> str:
             today_data = weekday
             break
     if not today_data or today_data is None:
-        return "Пар нет!"
+        date_object = datetime.strptime(today_date, '%Y-%m-%d')
+        date_and_month = date_object.strftime('%d %b')
+        day_of_week = date_object.strftime('%a')
+        return f"{date_and_month}, {day_of_week.lower()}\nПар нет!\n"
+
     result = await turn_day_to_str(today_data)
     return result
 
@@ -56,6 +63,7 @@ async def get_today_schedule_str(faculty_id: int, group_id: int) -> str:
 async def get_tomorrow_schedule_str(faculty_id: int, group_id: int) -> str:
     tomorrow = datetime.now() + timedelta(days=1)
     tomorrow_date = tomorrow.strftime("%Y-%m-%d")
+    tomorrow_date = '2023-11-25'
     weekdays_data = await get_week_schedule_data(faculty_id=faculty_id, group_id=group_id, date=tomorrow_date)
     today_data = None
     for weekday in weekdays_data:
@@ -63,7 +71,10 @@ async def get_tomorrow_schedule_str(faculty_id: int, group_id: int) -> str:
             today_data = weekday
             break
     if not today_data or today_data is None:
-        return "Пар нет!"
+        date_object = datetime.strptime(tomorrow_date, '%Y-%m-%d')
+        date_and_month = date_object.strftime('%d %b')
+        day_of_week = date_object.strftime('%a')
+        return f"{date_and_month}, {day_of_week.lower()}\nПар нет!"
     result = await turn_day_to_str(today_data)
     return result
 

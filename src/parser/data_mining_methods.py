@@ -83,6 +83,7 @@ async def get_week_schedule_data(faculty_id: int, group_id: int,
     return weekdays_data
 
 
+# ================================================================
 async def _temp_print_schedule_data(faculty_id: int = 125, group_id: int = 38645, date: str = '2023-11-23'):
     data = await _parse_week_schedule(faculty_id=faculty_id, group_id=group_id, date=date)
     weekdays_data = data['lessons']['data'][f'{group_id}']  # list[dict] - every weekday info
@@ -96,5 +97,6 @@ async def _temp_print_schedule_data(faculty_id: int = 125, group_id: int = 38645
 
 if __name__ == '__main__':
     asyncio.run(_temp_print_schedule_data())
+# ================================================================
 
 institutes_acronyms: list[str] = asyncio.run(get_institutes_abbrs())

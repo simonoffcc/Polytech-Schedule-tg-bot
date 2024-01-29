@@ -23,13 +23,15 @@ async def today_tomorrow_command_handler(message: types.Message):
 @get_schedule_router.message(Command(commands=['week']))
 @get_schedule_router.message(F.text == 'Текущая неделя')
 async def week_command_handler(message: types.Message):
-    string = await get_week_schedule_str(125, 38645, '2023-11-27')
-    return await message.answer(current_week_schedule.format(string),
-                                reply_markup=MENU_BOARD)
+    return await message.answer(
+        current_week_schedule.format(
+            await get_week_schedule_str(125, 38645, '2023-11-27')),
+        reply_markup=MENU_BOARD)
 
 
 @get_schedule_router.message(Command(commands=['next_week']))
 @get_schedule_router.message(F.text == 'Следующая неделя')
 async def next_week_command_handler(message: types.Message):
-    return await message.answer(next_week_schedule.format('<NEXT WEEK SCHEDULE>'),
+    return await message.answer(
+        next_week_schedule.format('<NEXT WEEK SCHEDULE>'),
                                 reply_markup=MENU_BOARD)
