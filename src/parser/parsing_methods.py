@@ -1,9 +1,10 @@
 import re
 import json
-from typing import Union
-
 import requests
+from typing import Union
 from datetime import datetime
+
+from src.utils import date_to_str
 
 
 BASE_URL = 'https://ruz.spbstu.ru/'
@@ -42,18 +43,6 @@ async def _parse_group_selection_page(institute_id: int) -> dict:
     return data
 
 
-async def date_to_str(date: Union[datetime, str] = None) -> str:
-    if date is None:
-        date = datetime.now()
-    elif isinstance(date, str):
-        date = datetime.strptime(date, '%Y-%m-%d')
-
-    if not isinstance(date, datetime):
-        raise ValueError("Input should be either a string or a datetime object")
-
-    return date.strftime('%Y-%m-%d')
-
-
 async def _parse_week_schedule(faculty_id: int, group_id: int, date: Union[datetime, str] = None) -> dict:
     """Функция, которая парсит расписание на всю неделю, в которой содержится указанная дата."""
     date = await date_to_str(date)
@@ -67,17 +56,3 @@ async def _parse_week_schedule(faculty_id: int, group_id: int, date: Union[datet
         raise DataNotFound("Данные о расписании из 'window.__INITIAL_STATE__' не найдены!")
     data = json.loads(data.group(1))
     return data
-
-
-"""
-async def _parse_today_schedule(user) -> str:
-    ...
-
-
-async def _parse_tomorrow_schedule(user) -> str:
-    ...
-
-
-async def _parse_next_week_schedule(user) -> str:
-    ...
-"""

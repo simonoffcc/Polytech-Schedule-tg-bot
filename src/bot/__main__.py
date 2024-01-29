@@ -1,5 +1,6 @@
 """This file represent startup bot logic."""
 import sys
+import locale
 import asyncio
 import logging
 
@@ -36,5 +37,6 @@ async def start_bot():
 
 
 if __name__ == '__main__':
+    locale.setlocale(locale.LC_ALL, "")
     logging.basicConfig(level=conf.logging_level, stream=sys.stdout)
     asyncio.run(start_bot())
