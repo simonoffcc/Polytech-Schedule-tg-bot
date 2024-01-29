@@ -42,16 +42,21 @@ async def _parse_group_selection_page(institute_id: int) -> dict:
     return data
 
 
+async def date_to_str(date: Union[datetime, str] = None) -> str:
+    if date is None:
+        date = datetime.now()
+    elif isinstance(date, str):
+        date = datetime.strptime(date, '%Y-%m-%d')
+
+    if not isinstance(date, datetime):
+        raise ValueError("Input should be either a string or a datetime object")
+
+    return date.strftime('%Y-%m-%d')
+
+
 async def _parse_week_schedule(faculty_id: int, group_id: int, date: Union[datetime, str] = None) -> dict:
     """Функция, которая парсит расписание на всю неделю, в которой содержится указанная дата."""
-    if not date:
-        date = datetime.now()
-        date = date.strftime('%Y-%m-%d')
-    if isinstance(date, str):
-        date = datetime.strptime(date, '%Y-%m-%d')
-    if isinstance(date, datetime):
-        date = date.strftime('%Y-%m-%d')
-
+    date = await date_to_str(date)
     url = PERSONALIZED_URL.format(faculty_id, group_id, date)
     req = requests.get(url)
     if req.status_code != 200:
