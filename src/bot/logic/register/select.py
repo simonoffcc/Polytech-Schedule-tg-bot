@@ -16,7 +16,9 @@ from src.bot.structures.states import Registration
 
 
 @register_router.message(and_f(F.text.lower().in_(["отмена", "отменить настройку"]),
-                               or_f(Registration.institute_choice, Registration.group_choice)))
+                               or_f(Registration.institute_choice,
+                                    Registration.group_choice,
+                                    Registration.confirmation)))
 async def cancel_button_handler(message: types.Message, state: FSMContext):
     await state.clear()
     return await message.answer(cancel_registration, reply_markup=MENU_BOARD)
@@ -29,7 +31,7 @@ async def back_button_handler(message: types.Message, state: FSMContext):
     return await message.answer(choose_institute, reply_markup=faculties)
 
 
-@register_router.message(Registration.confirmation, F.text.lower() == "назад")
+@register_router.message(and_f(Registration.confirmation, F.text.lower() == "назад"))
 async def add_user_handler(message: types.Message, state: FSMContext):
     await state.set_state(Registration.group_choice)
     register_data = await state.get_data()
@@ -47,7 +49,7 @@ async def start_reg_user_handler(message: types.Message, state: FSMContext):
     return await message.answer(choose_institute, reply_markup=faculties)
 
 
-@register_router.message(Registration.institute_choice, IsInstituteExists())
+@register_router.message(and_f(Registration.institute_choice, IsInstituteExists()))
 async def choose_institute_handler(message: types.Message, state: FSMContext):
     await state.update_data(institute=message.text)
     await state.set_state(Registration.group_choice)
@@ -55,24 +57,26 @@ async def choose_institute_handler(message: types.Message, state: FSMContext):
     return await message.answer(choose_group)
 
 
-@register_router.message(Registration.institute_choice, ~IsInstituteExists())
+@register_router.message(and_f(Registration.institute_choice, ~IsInstituteExists()))
 async def unknown_institute_handler(message: types.Message):
     faculties = await generate_acronyms_reply_keyboard()
     await message.answer(dont_know_institute, reply_markup=faculties)
     return await message.answer(enter_valid_institute, reply_markup=faculties)
 
 
-@register_router.message(Registration.group_choice, ~CorrectGroupFormat())
+@register_router.message(and_f(Registration.group_choice, ~CorrectGroupFormat()))
 async def incorrect_group_handler(message: types.Message):
     return await message.answer(enter_valid_group)
 
 
-@register_router.message(Registration.group_choice, ~IsGroupExists())
+@register_router.message(and_f(Registration.group_choice, ~IsGroupExists()))
 async def not_found_group_handler(message: types.Message):
     return await message.answer(not_found_group)
 
 
-@register_router.message(Registration.group_choice, CorrectGroupFormat(), IsGroupExists())
+@register_router.message(and_f(Registration.group_choice,
+                               CorrectGroupFormat(),
+                               IsGroupExists()))
 async def data_confirmation_handler(message: types.Message, state: FSMContext):
     await state.update_data(group=message.text)
     register_data = await state.get_data()
