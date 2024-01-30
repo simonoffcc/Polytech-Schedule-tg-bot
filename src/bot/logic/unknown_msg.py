@@ -1,6 +1,6 @@
 from aiogram import Router, types
 
-from src.bot.structures.message_texts import help_text
+from src.bot.structures.lexicon import help_text
 from src.bot.structures.keyboards import MENU_BOARD
 
 unknown_message = Router(name='unknown_message')

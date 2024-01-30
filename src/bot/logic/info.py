@@ -1,7 +1,7 @@
 from aiogram import Router, types, F
 from aiogram.filters import Command
 
-from src.bot.structures.message_texts import info_text
+from src.bot.structures.lexicon import info_text
 from src.bot.structures.keyboards import DEVINFO_BOARD
 
 info_router = Router(name='info')

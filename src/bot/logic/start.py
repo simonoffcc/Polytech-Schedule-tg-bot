@@ -5,7 +5,7 @@ from aiogram.utils.markdown import hbold
 
 from src.bot.filters import RegisterFilter
 
-from src.bot.structures.message_texts import hi, help_text
+from src.bot.structures.lexicon import hi, help_text
 from src.bot.structures.keyboards import MENU_BOARD
 
 start_router = Router(name='start')

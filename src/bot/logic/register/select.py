@@ -6,10 +6,10 @@ from aiogram.fsm.context import FSMContext
 from .router import register_router
 from src.db import Database
 from src.bot.filters import (RegisterFilter, IsInstituteExists, CorrectGroupFormat, IsGroupExists)
-from src.bot.structures.message_texts import (hi, choose_institute, choose_group,
-                                              dont_know_institute, enter_valid_institute,
-                                              not_found_group, enter_valid_group,
-                                              schedule_is_set, cancel_registration)
+from src.bot.structures.lexicon import (hi, choose_institute, choose_group,
+                                        dont_know_institute, enter_valid_institute,
+                                        not_found_group, enter_valid_group,
+                                        schedule_is_set, cancel_registration)
 from src.bot.structures.keyboards import (generate_acronyms_reply_keyboard, MENU_BOARD,
                                           BACK_OR_CANCEL, CONFIRMATION_BOARD)
 from src.bot.structures.states import Registration

@@ -1,11 +1,11 @@
 from aiogram import Router, types, F
 from aiogram.filters import Command
 
-from src.bot.structures.message_texts import (today_tomorrow_schedule,
-                                              current_week_schedule,
-                                              next_week_schedule)
+from src.bot.structures.lexicon import (today_tomorrow_schedule,
+                                        current_week_schedule,
+                                        next_week_schedule)
 from src.bot.structures.keyboards import MENU_BOARD
-from src.parser import get_week_schedule_str, get_today_schedule_str, get_tomorrow_schedule_str
+from src.parser import get_week_schedule_str, get_day_schedule_by_key_str
 
 get_schedule_router = Router(name='schedule')
 
@@ -15,8 +15,8 @@ get_schedule_router = Router(name='schedule')
 async def today_tomorrow_command_handler(message: types.Message):
     return await message.answer(
         today_tomorrow_schedule.format(
-            await get_today_schedule_str(125, 38645),
-            await get_tomorrow_schedule_str(125, 38645)),
+            await get_day_schedule_by_key_str(125, 38645, key=0),
+            await get_day_schedule_by_key_str(125, 38645, key=1)),
         reply_markup=MENU_BOARD)
 
 
