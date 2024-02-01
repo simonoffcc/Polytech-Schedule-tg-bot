@@ -7,11 +7,11 @@ from src.bot.structures.lexicon import (today_tomorrow_schedule,
 from src.bot.structures.keyboards import MENU_BOARD
 from src.parser import get_week_schedule_str, get_day_schedule_by_key_str
 
-get_schedule_router = Router(name='schedule')
+schedule_router = Router(name='schedule')
 
 
-@get_schedule_router.message(Command(commands=['today_tomorrow']))
-@get_schedule_router.message(F.text == 'Сегодня и завтра')
+@schedule_router.message(Command(commands=['today_tomorrow']))
+@schedule_router.message(F.text == 'Сегодня и завтра')
 async def today_tomorrow_command_handler(message: types.Message):
     return await message.answer(
         today_tomorrow_schedule.format(
@@ -20,8 +20,8 @@ async def today_tomorrow_command_handler(message: types.Message):
         reply_markup=MENU_BOARD)
 
 
-@get_schedule_router.message(Command(commands=['week']))
-@get_schedule_router.message(F.text == 'Текущая неделя')
+@schedule_router.message(Command(commands=['week']))
+@schedule_router.message(F.text == 'Текущая неделя')
 async def week_command_handler(message: types.Message):
     return await message.answer(
         current_week_schedule.format(
@@ -29,8 +29,8 @@ async def week_command_handler(message: types.Message):
         reply_markup=MENU_BOARD)
 
 
-@get_schedule_router.message(Command(commands=['next_week']))
-@get_schedule_router.message(F.text == 'Следующая неделя')
+@schedule_router.message(Command(commands=['next_week']))
+@schedule_router.message(F.text == 'Следующая неделя')
 async def next_week_command_handler(message: types.Message):
     return await message.answer(
         next_week_schedule.format('<NEXT WEEK SCHEDULE>'),
