@@ -44,6 +44,11 @@ async def get_institutes_abbrs() -> list[str]:
     return institutes_abbrs
 
 
+async def get_institute_groups(institute_id: int):  # -> list[str]:
+    groups_data = await get_groups_data(institute_id)
+    print(json.dumps(groups_data, indent=4, ensure_ascii=False))
+
+
 async def get_value_by_another_key(key_to_search: str,
                                    value_to_search: str | int,
                                    key_to_return_value: str) -> int | str | None:
@@ -63,6 +68,7 @@ async def get_value_by_another_key(key_to_search: str,
 
 
 async def get_institutes_names() -> list[str]:
+    """Метод, который возвращает список полных названий всех институтов."""
     faculties = await get_institutes_data()
     institutes_names = list(filter(None, (faculty.get('name') for faculty in faculties)))
     return institutes_names
@@ -77,26 +83,15 @@ async def get_week_schedule_data(faculty_id: int, group_id: int,
     * - заданной неделей считается неделя, которая содержит переданную в метод дату (воскресенье тоже поддерживается).
     """
     data = await _parse_week_schedule(faculty_id=faculty_id, group_id=group_id, date=date)
-    weekdays_data = data['lessons']['data'][f'{group_id}']  # list[dict] - every weekday info
+    weekdays_data = data['lessons']['data'][f'{group_id}']
     if not isinstance(weekdays_data, list):
         raise TypeError("Ошибка хранения информации о расписании в формате 'list[dict]'!")
     return weekdays_data
 
 
-# ================================================================
-async def _temp_print_schedule_data(faculty_id: int = 125, group_id: int = 38645, date: str = '2023-11-23'):
-    data = await _parse_week_schedule(faculty_id=faculty_id, group_id=group_id, date=date)
-    weekdays_data = data['lessons']['data'][f'{group_id}']  # list[dict] - every weekday info
-    if not isinstance(weekdays_data, list):
-        raise TypeError("Ошибка хранения информации о расписании в формате 'list[dict]'!")
-    if not weekdays_data:
-        print("Нет пар!")
-    else:
-        print(json.dumps(weekdays_data, indent=4, ensure_ascii=False))
+institutes_acronyms: list[str] = asyncio.run(get_institutes_abbrs())
+institute_groups: list[str] = asyncio.run(get_institute_groups(125))
 
 
 if __name__ == '__main__':
-    asyncio.run(_temp_print_schedule_data())
-# ================================================================
-
-institutes_acronyms: list[str] = asyncio.run(get_institutes_abbrs())
+    asyncio.run(get_institute_groups(125))
